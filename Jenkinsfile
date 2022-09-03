@@ -20,19 +20,32 @@ pipeline{
       steps{
         echo 'deploying an application'
                 script {
-                  def publisher = LastChanges.getLastChangesPublisher "PREVIOUS_REVISION", "SIDE", "LINE", true, true, "", "", "", "", ""
-                  publisher.publishLastChanges()
-                  def htmlDiff = publisher.getHtmlDiff()
-//                   mail bcc: '', body: "${htmlDiff}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: 'Code check in done', to: 'funtimeprojectsofus@gmail.com'
+//                   def publisher = LastChanges.getLastChangesPublisher "PREVIOUS_REVISION", "SIDE", "LINE", true, true, "", "", "", "", ""
+//                   publisher.publishLastChanges()
+//                   def htmlDiff = publisher.getHtmlDiff()
+// //                   mail bcc: '', body: "${htmlDiff}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: 'Code check in done', to: 'funtimeprojectsofus@gmail.com'
 
-                  writeFile file: 'build-diff.html', text: htmlDiff
+//                   writeFile file: 'build-diff.html', text: htmlDiff
+//                     emailext (
+//                       subject: "Jenkins - changes of ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+//                       attachmentsPattern: '**/*build-diff.html',
+//                       mimeType: 'text/html',
+//                       body: """<p>See attached diff of build <b>${env.JOB_NAME} #${env.BUILD_NUMBER}</b>.</p>
+//                         <p>Check build changes on Jenkins <b><a href="${env.BUILD_URL}/last-changes">here</a></b>.</p>""",
+//                       to: "funtimeprojectsofus@gmail.com" )
+                  
+                     def publisher = LastChanges.getLastChangesPublisher null, "SIDE", "LINE", true, true, "", "", "", "", ""
+                    publisher.publishLastChanges()
+                    def diff = publisher.getDiff()
+                    writeFile file: 'build.diff', text: diff
                     emailext (
                       subject: "Jenkins - changes of ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                      attachmentsPattern: '**/*build-diff.html',
+                      attachmentsPattern: '**/*.diff',
                       mimeType: 'text/html',
-                      body: """<p>See attached diff of build <b>${env.JOB_NAME} #${env.BUILD_NUMBER}</b>.</p>
+                      body: """<p>See attached diff of <b>${env.JOB_NAME} #${env.BUILD_NUMBER}</b>.</p>
                         <p>Check build changes on Jenkins <b><a href="${env.BUILD_URL}/last-changes">here</a></b>.</p>""",
-                      to: "funtimeprojectsofus@gmail.com" )
+                      to: "YOUR-EMAIL@gmail.com")
+                  
                 } 
       }
     }
