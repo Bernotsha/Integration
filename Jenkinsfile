@@ -7,7 +7,6 @@ pipeline{
     stage("build"){
         
       steps{
-        echo "${GIT_COMMITTER_NAME}"
         echo 'building an application'
       }
     }
@@ -18,7 +17,6 @@ pipeline{
       }
     }
     stage("checkout"){
-        
       steps{
         echo 'checking out an application'
       }
