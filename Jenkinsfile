@@ -7,6 +7,7 @@ pipeline{
     stage("build"){
         
       steps{
+        echo GIT_COMMITTER_EMAIL
         echo 'building an application'
       }
     }
