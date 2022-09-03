@@ -8,6 +8,8 @@ pipeline{
         
       steps{
         echo 'building an application'
+        def author = sh(returnStdout: true, script: "git log -1 --pretty=format:'%an'").trim()
+        echo "$author"
       }
     }
     stage("deploy"){
